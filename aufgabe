@@ -1,0 +1,85 @@
+*   HA, vorführen am 2.5 !!!
+
+  *
+
+  *   Auswerter für Ausdrücke
+
+  *     Dazu:   -Algebraische Datenstruktur für Ausdrücke, die enthalten +, -, *, /, (, ), Potenzen
+
+  *             -Konstanten, Variablen, die vorher mit Werten belegt wurden.
+
+  *
+
+  *     x = 5,
+
+  *     3*(x-1) * (x+2)^2 + 1 (als algebraischer Datentyp, wie bei Bäumen)
+
+  *
+
+  *     Ausdruck sodass x = 5 Wert des algebraischen Datentyp
+
+  *
+
+  *     Beispiel:
+
+  *       val ausdruck = AlgebraischerDatentyp(x = 5,
+
+  *       3*(x-1) * (x+2)^2 + 1 )
+
+  *       print(ausdruck.eval)
+
+  *
+
+  *     Belegung der Variablen mit Hastabellen
+
+Parser (später mit Monaden)
+--------------------------
+Sprache {a^n b^n | n=>0}
+Grammatik S -> aSb| e(=leeres Wort)
+
+Funktionen programmieren, die den Regeln entsprechen. Diese bekommen den restlichen Wortteil und matchen und erstellen Präfix.
+Versuche möglichst langes Wort finden
+
+S(aabb) return abb
+S(abb) return b
+S(b) return ""
+Bei leerstring ist alles gut, sonst ist klar das, das Wort nicht aus der Grammatik ableitbar war.
+
+
+abstract class Parser {
+	def parse(in: List[Char]): List[Char]
+	
+	def accepts(in: List[Char])): Boolean = [
+		parse(in ::: List('#')) == List('#')
+	}
+	
+	def matchC(c: Char, in: List[Char]): List[Char] = in match {
+		case Nil => Nil
+		case h::t => 
+		if (h == c) t
+		else Nil // Falls Fehler in Parsvorgang Fehler immer weiter geben
+	}
+	
+	//Für lookahead
+	def isNext(c: Char, in: List[Char]): Boolean = in match {
+		case Nil => Nil
+		case h::_ = > h==c
+		}
+		
+		case Object AnBn extends Parser {
+			def parse(in: List[Char]): List[Char] = {
+				// S -> aSb
+				if (isNext('a', in)) {
+					val o1 = matchC('a', in)
+					val o2 = parse(o1)
+					matchC('b', o2)
+				}
+				// S -> e
+				else in
+			}
+		}
+}
+
+- Vorrang/Assoziativ der Operatoren
+- Keine vars
+- Tokenizer der Tokens identifiziert( Reguläre Ausdrücke um Tokens zu finden)
